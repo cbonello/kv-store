@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package kv;
+
+// The client service definition.
+service Client {
+    // Retrieves a key from a server.
+    rpc Get (GetKey) returns (GetReply) {}
+    // Set a key on a server.
+    rpc Set (SetKey) returns (SetReply) {}
+    // List all the keys defined on a server.
+    rpc List (Void) returns (StoreReply) {}
+    // Registers a new server with a peer.
+    rpc RegisterWithPeer (IP) returns (StoreReply) {}
+}
+
+// The GET message containing the key's name.
+message GetKey {
+    string key = 1;
+}
+
+// The response message containing the key's value.
+message GetReply {
+    string value = 1;
+    // True if key was defined, otherwise false.
+    bool defined = 2;
+}
+
+// The SET message containing the key's name and value.
+message SetKey {
+    string key = 1;
+    string value = 2;
+    // True for client's request, false for peer updates.
+    bool broadcast = 3;
+}
+
+// The response message containing the key's value.
+message SetReply {
+    string value = 1;
+}
+
+// The LIST message.
+message Void {
+}
+
+// The peer registration message containing the IP address of the new peer.
+message IP {
+    string ip = 1;
+}
+
+// The response message containing the key-value store.
+message StoreReply {
+    map<string, string> store = 1;
+}
